@@ -1,0 +1,35 @@
+// assets/css/_mixins.scss
+
+// Media query helper
+@mixin respond($breakpoint) {
+    @if $breakpoint ==sm {
+        @media (min-width: $bp-sm) {
+            @content;
+        }
+    }
+
+    @if $breakpoint ==md {
+        @media (min-width: $bp-md) {
+            @content;
+        }
+    }
+
+    @if $breakpoint ==lg {
+        @media (min-width: $bp-lg) {
+            @content;
+        }
+    }
+
+    @if $breakpoint ==xl {
+        @media (min-width: $bp-xl) {
+            @content;
+        }
+    }
+}
+
+// Flex center
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

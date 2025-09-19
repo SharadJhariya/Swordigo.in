@@ -1,0 +1,916 @@
+@charset "UTF-8";
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: #000000;
+  background: #ffffff;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+/* Sidebar + Toggle Component (Swordigo.IN)
+   Saved as: assets/css/components/_sidebar.scss
+   Import into main.scss and compile to assets/css/main.css
+*/
+/* Theme variables */
+/* Sidebar container */
+#comp-sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background: #1f1f1f;
+  color: rgba(255, 255, 255, 0.92);
+  box-shadow: 6px 0 24px rgba(0, 0, 0, 0.5);
+  transition: left 0.3s cubic-bezier(0.2, 0.9, 0.2, 1);
+  z-index: 1600;
+  overflow-y: auto;
+}
+#comp-sidebar.is-open {
+  left: 0;
+}
+#comp-sidebar .sidebar__inner {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  min-height: 100%;
+}
+#comp-sidebar .sidebar__close {
+  align-self: flex-end;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 20px;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#comp-sidebar .sidebar__close:hover {
+  color: #fff;
+  transform: translateY(-1px);
+}
+#comp-sidebar .sidebar__nav {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+#comp-sidebar .sidebar__nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background 0.12s ease, transform 0.08s ease, color 0.12s ease;
+  font-size: 1rem;
+}
+#comp-sidebar .sidebar__nav a .material-icons {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.92);
+  width: 28px;
+  text-align: center;
+}
+#comp-sidebar .sidebar__nav a:hover {
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+  color: #fff;
+}
+#comp-sidebar .sidebar__nav .sidebar-item--danger {
+  color: #ffb3a6;
+}
+#comp-sidebar .sidebar__nav .sidebar-sep {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin: 10px 0;
+}
+
+/* Backdrop */
+#sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+  z-index: 1550;
+}
+#sidebar-backdrop.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Toggle button */
+.sidebar-toggle {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 1700;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #2a2a2a;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease, box-shadow 0.12s ease;
+  /* Hide toggle on small/medium screens */
+  /* If JS adds explicit hidden class when sidebar is open, hide it */
+}
+.sidebar-toggle .material-icons {
+  font-size: 22px;
+}
+.sidebar-toggle:hover {
+  transform: translateY(-2px);
+}
+.sidebar-toggle.active {
+  color: #2a2a2a;
+}
+@media (max-width: 991px) {
+  .sidebar-toggle {
+    display: none !important;
+  }
+}
+.sidebar-toggle.hidden {
+  display: none !important;
+}
+
+/* Accessibility focus outlines */
+.sidebar-toggle:focus,
+#comp-sidebar .sidebar__close:focus,
+#comp-sidebar .sidebar__nav a:focus {
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Responsive: bottom drawer on very small screens */
+@media (max-width: 480px) {
+  #comp-sidebar {
+    left: 0;
+    transform: translateY(100%);
+    width: 100%;
+    max-width: 100%;
+    bottom: 0;
+    top: auto;
+    transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.2, 1);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+  #comp-sidebar.is-open {
+    transform: translateY(0);
+  }
+}
+/* local vars */
+/* NAVBAR BASE */
+#main-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: #ffffff;
+  color: #2a2a2a;
+  border-bottom: 1px solid #f6f6f6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  z-index: 1200;
+  font-family: "Inter", sans-serif;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* columns */
+#main-navbar .nav-left,
+#main-navbar .nav-right {
+  flex: 1;
+}
+
+#main-navbar .nav-center {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-link img {
+  max-height: 42px;
+  display: block;
+}
+
+/* RIGHT SIDE AREA */
+#main-navbar .nav-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  overflow: visible;
+}
+
+/* Search behaviour (desktop only) */
+.search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.search-input {
+  max-width: 0;
+  opacity: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: #f5f5f5;
+  color: #2a2a2a;
+  border-radius: 50px;
+  transition: max-width 0.18s ease, opacity 0.18s ease, padding 0.18s ease;
+}
+
+.search-container.is-active .search-input {
+  max-width: 220px;
+  padding: 7px 10px;
+  opacity: 1;
+}
+
+.search-icon {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: #2a2a2a;
+  padding: 6px;
+}
+
+/* Icon styles */
+.nav-icon {
+  background: none;
+  border: 0;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #2a2a2a;
+}
+
+.nav-icon i {
+  font-size: 18px;
+}
+
+/* Badge inside the button (fixed, inside) */
+.notification-icon {
+  position: relative;
+}
+
+.notification-icon .badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #e74c3c;
+  color: #ffffff;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  border: 2px solid #ffffff;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+/* Profile link (avatar + optional user-info if present) */
+.profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: #2a2a2a;
+}
+.profile-link img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 2px solid transparent;
+  transition: border-color 0.18s;
+  display: block;
+}
+.profile-link:hover img {
+  border-color: #2a2a2a;
+}
+.profile-link .user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.profile-link .user-info .user-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+.profile-link .user-info .user-role {
+  font-size: 12px;
+  color: black;
+}
+
+/* ---- GENERIC PORTAL DROPDOWN (applies to all portals) ---- */
+.portal-dropdown {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  min-width: 220px;
+  background: #ffffff;
+  border: 1px solid rgb(251.1, 251.1, 251.1);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 6px 0;
+  z-index: 99999;
+  opacity: 0;
+  transform: translateY(-6px) scale(0.995);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  will-change: transform, opacity;
+  overflow: hidden;
+  --portal-arrow-left: 16px;
+}
+
+/* show state */
+.portal-dropdown.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* arrow — uses CSS variable set by JS */
+.portal-dropdown::before {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  transform: rotate(45deg);
+  border-left: 1px solid rgb(251.1, 251.1, 251.1);
+  border-top: 1px solid rgb(251.1, 251.1, 251.1);
+  top: -6px;
+  left: calc(var(--portal-arrow-left, 16px) - 6px);
+  box-shadow: -3px -3px 6px rgba(0, 0, 0, 0.02);
+  display: block;
+  pointer-events: none;
+}
+
+/* menu item */
+.portal-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  color: #2a2a2a;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.portal-dropdown a:hover {
+  background: #f5f5f5;
+}
+
+/* menu header */
+.portal-dropdown .notif-title {
+  padding: 8px 14px;
+  color: black;
+  font-size: 13px;
+  border-bottom: 1px solid white;
+}
+
+/* ---------- PROFILE PORTAL (dark theme using $charcoal) ---------- */
+.portal-dropdown.profile {
+  background: #2a2a2a;
+  color: #ffffff;
+  border-color: rgb(26.7, 26.7, 26.7);
+}
+
+/* arrow color for dark profile portal */
+.portal-dropdown.profile::before {
+  background: #2a2a2a;
+  border-left-color: rgb(26.7, 26.7, 26.7);
+  border-top-color: rgb(26.7, 26.7, 26.7);
+  box-shadow: none;
+}
+
+/* profile header area */
+.portal-dropdown.profile .profile-header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* avatar in header */
+.portal-dropdown.profile .profile-header .ph-avatar {
+  height: 48px;
+  width: 48px;
+  border-radius: 10px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+/* info */
+.portal-dropdown.profile .profile-header .ph-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  overflow: hidden;
+}
+
+.portal-dropdown.profile .ph-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: #ffffff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.portal-dropdown.profile .ph-email {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 2px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* items list for profile */
+.portal-dropdown.profile .profile-items {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+}
+
+.portal-dropdown.profile .profile-items a {
+  padding: 12px 14px;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 14px;
+  text-decoration: none;
+  align-items: center;
+  display: flex;
+  transition: background 0.18s ease;
+}
+
+.portal-dropdown.profile .profile-items a i,
+.portal-dropdown.profile .profile-footer a i {
+  color: rgba(255, 255, 255, 0.9);
+  width: 18px;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* subtle separators between groups */
+.portal-dropdown.profile .profile-items a + a {
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* hover */
+.portal-dropdown.profile .profile-items a:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* footer area with a separator */
+.portal-dropdown.profile .profile-footer {
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* sign out emphasized (use badge color) */
+.portal-dropdown.profile .profile-footer a.sign-out {
+  padding: 12px 14px;
+  color: #ffffff;
+  font-weight: 600;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  /* make the label slightly accented */
+  color: rgba(255, 255, 255, 0.98);
+}
+.portal-dropdown.profile .profile-footer a.sign-out i {
+  color: #e74c3c;
+}
+
+/* ---------- NOTIFICATIONS PORTAL (dark, match screenshot) ---------- */
+.portal-dropdown.notifications {
+  width: 360px;
+  min-width: 280px;
+  max-width: calc(100vw - 32px);
+  padding: 0;
+  background: linear-gradient(180deg, rgb(36.9, 36.9, 36.9), rgb(26.7, 26.7, 26.7));
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  box-shadow: 0 18px 50px rgba(20, 30, 60, 0.5);
+  color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* arrow color & border */
+.portal-dropdown.notifications::before {
+  background: linear-gradient(180deg, rgb(36.9, 36.9, 36.9), rgb(26.7, 26.7, 26.7));
+  border-left-color: rgba(0, 0, 0, 0.25);
+  border-top-color: rgba(0, 0, 0, 0.25);
+  box-shadow: none;
+}
+
+/* inner wrapper */
+.portal-dropdown.notifications .notifications-inner {
+  padding: 12px 10px;
+}
+
+/* list */
+.portal-dropdown.notifications .notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* item */
+.portal-dropdown.notifications .notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(0, 0, 0, 0.03));
+  transition: background 0.12s ease, transform 0.12s ease;
+  position: relative;
+}
+
+/* hover */
+.portal-dropdown.notifications .notif-item:hover {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  transform: translateY(-1px);
+}
+
+/* avatar (small top nudge so top-align with name line) */
+.portal-dropdown.notifications .notif-avatar {
+  height: 44px;
+  width: 44px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.06);
+  margin-top: 2px;
+}
+
+/* body */
+.portal-dropdown.notifications .notif-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* text */
+.portal-dropdown.notifications .notif-text {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 14px;
+  line-height: 1.25;
+  white-space: normal;
+}
+
+/* first line pieces (name + action inline) */
+.portal-dropdown.notifications .notif-name {
+  font-weight: 700;
+  margin-right: 6px;
+  display: inline;
+}
+
+.portal-dropdown.notifications .notif-action {
+  display: inline;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* link on its own line for emphasis */
+.portal-dropdown.notifications .notif-link {
+  display: block;
+  margin-top: 6px;
+  color: #6fb8ff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.portal-dropdown.notifications .notif-link:hover {
+  text-decoration: underline;
+}
+
+/* meta */
+.portal-dropdown.notifications .notif-meta {
+  margin-top: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* actions: align to top so button sits next to first line */
+.portal-dropdown.notifications .notif-actions {
+  margin-left: 8px;
+  display: flex;
+  align-items: flex-start;
+  align-self: flex-start;
+}
+
+/* small square/circular button */
+.portal-dropdown.notifications .notif-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  height: 34px;
+  width: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s ease, transform 0.08s ease;
+  font-size: 13px;
+}
+
+.portal-dropdown.notifications .notif-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-1px);
+}
+
+/* focus (keyboard) */
+.portal-dropdown.notifications .notif-btn:focus,
+.portal-dropdown.notifications .footer-btn:focus {
+  outline: 2px solid rgba(111, 184, 255, 0.22);
+  outline-offset: 2px;
+}
+
+/* footer */
+.portal-dropdown.notifications .notif-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(0, 0, 0, 0.02));
+}
+
+.portal-dropdown.notifications .view-all {
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.portal-dropdown.notifications .notif-footer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.portal-dropdown.notifications .footer-btn {
+  height: 34px;
+  width: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+}
+
+/* subtle scrollbar */
+.portal-dropdown.notifications .notif-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.portal-dropdown.notifications .notif-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+}
+
+/* responsive tweaks */
+@media (max-width: 768px) {
+  #main-navbar {
+    padding: 0 0.5rem;
+  }
+  .nav-left {
+    display: none;
+  }
+  .nav-center {
+    justify-content: flex-start;
+  }
+  /* hide search on mobile (both input & icon) */
+  .search-container,
+  .search-icon {
+    display: none !important;
+  }
+  .profile-link img {
+    height: 36px;
+    width: 36px;
+  }
+  .profile-link .user-info {
+    display: none;
+  }
+  .notification-icon .badge {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    padding: 0 4px;
+  }
+  .portal-dropdown.notifications {
+    width: calc(100vw - 24px);
+    left: 12px !important;
+    right: 12px !important;
+    border-radius: 8px;
+  }
+  .portal-dropdown.notifications .notif-item {
+    padding: 10px 8px;
+    gap: 10px;
+  }
+  .portal-dropdown.notifications .notif-avatar {
+    height: 40px;
+    width: 40px;
+  }
+  .portal-dropdown.notifications .notif-footer {
+    padding: 8px;
+  }
+  .portal-dropdown.profile .profile-header {
+    padding: 10px 12px;
+  }
+  .portal-dropdown.profile .profile-items a,
+  .portal-dropdown.profile .profile-footer a {
+    padding: 10px 12px;
+  }
+}
+/* utility: ensure portal arrow uses CSS var even if not set */
+.portal-dropdown {
+  --portal-arrow-left: 16px;
+}
+
+.site-footer {
+  background: #262626;
+  color: #ffffff;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  font-family: "Inter", sans-serif;
+}
+.site-footer__inner, .site-footer__wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.15rem;
+  padding: 0 12px;
+}
+.site-footer__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+}
+.site-footer__brand .site-footer__logo {
+  width: 150px;
+  height: auto;
+  display: inline-block;
+  -o-object-fit: contain;
+     object-fit: contain;
+  margin: 0 auto;
+}
+.site-footer__brand .site-footer__blurb {
+  max-width: 700px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  margin: 0 6px;
+}
+.site-footer__socials {
+  display: flex;
+  gap: 18px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.site-footer__socials .social {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.16s ease;
+}
+.site-footer__socials .social:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-3px);
+}
+.site-footer__socials .social i {
+  line-height: 1;
+  font-size: 16px;
+}
+.site-footer__divider {
+  width: 60%;
+  max-width: 600px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.04);
+  margin: 12px auto;
+}
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin: 6px 0;
+}
+.site-footer__links a {
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 4px;
+  transition: color 0.12s ease, transform 0.12s ease;
+}
+.site-footer__links a:hover {
+  color: #fff;
+  transform: translateY(-2px);
+}
+.site-footer__bottom {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+@media (min-width: 768px) {
+  .site-footer {
+    padding: 3rem 1rem;
+  }
+  .site-footer__brand .site-footer__logo {
+    width: 190px;
+  }
+  .site-footer__divider {
+    width: 45%;
+  }
+  .site-footer__inner {
+    gap: 1.25rem;
+  }
+  .site-footer__links {
+    gap: 28px;
+  }
+}
+@media (min-width: 1200px) {
+  .site-footer__brand .site-footer__logo {
+    width: 210px;
+  }
+  .site-footer__divider {
+    width: 40%;
+  }
+  .site-footer__brand .site-footer__blurb {
+    max-width: 680px;
+  }
+}/*# sourceMappingURL=main.css.map */
