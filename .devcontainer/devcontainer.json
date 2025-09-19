@@ -1,1 +1,20 @@
 
+{
+  "name": "PHP + MySQL Codespace",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [8000, 8081],
+  "postCreateCommand": "docker-compose up -d",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint",
+        "formulahendry.auto-close-tag"
+      ]
+    }
+  }
+}
