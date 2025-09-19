@@ -1,13 +1,21 @@
 version: "3.8"
 services:
   app:
-    image: php:8.2-apache
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: app
     volumes:
       - ..:/workspace:cached
+      - ./apache-site.conf:/etc/apache2/sites-available/000-default.conf:ro
     working_dir: /workspace
     depends_on:
       - db
+    environment:
+      - DB_HOST=db
+      - DB_DATABASE=swordigo
+      - DB_USERNAME=swordigo_user
+      - DB_PASSWORD=swordigo_pass
     ports:
       - "8000:80"
 
@@ -36,4 +44,3 @@ services:
 
 volumes:
   db_data:
-
