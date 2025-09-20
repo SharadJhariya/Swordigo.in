@@ -1,0 +1,307 @@
+// assets/scss/_home.scss
+// SCSS for #home-page (hero, products, offer, testimonials)
+// Import this into your main SCSS bundle or compile standalone.
+
+$max-width: 1200px;
+$card-radius: 12px;
+$accent: #0b1220;
+$muted: #9aa0a6;
+$bg: #f6f7fb;
+$card-shadow: 0 6px 18px rgba(20,24,40,0.06);
+
+#home-page {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: #111;
+  background: $bg;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+
+  /* ---------------- HERO ---------------- */
+  .home-hero {
+    position: relative;
+    height: 420px;
+    overflow: hidden;
+
+    &__video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    &__overlay {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      padding: 24px;
+      color: white;
+      background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.28) 40%, rgba(0,0,0,0.46) 100%);
+
+      .home-hero__title {
+        margin: 0;
+        font-size: clamp(20px, 3.2vw, 34px);
+        letter-spacing: 0.4px;
+      }
+      .home-hero__subtitle {
+        margin-top: 8px;
+        font-weight: 600;
+        font-size: clamp(13px, 1.6vw, 18px);
+        opacity: 0.95;
+      }
+    }
+  }
+
+  /* lift content to overlap hero */
+  .home-container {
+    max-width: $max-width;
+    margin: -60px auto 40px;
+    padding: 0 24px;
+  }
+
+  /* ---------------- PRODUCTS ---------------- */
+  .home-products {
+    &__header { margin-bottom: 8px; h2 { margin:0; font-size:20px; } }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+  }
+
+  .product-card {
+    background: #fff;
+    border-radius: $card-radius;
+    box-shadow: $card-shadow;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 360px;
+
+    &__fav {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      width: 36px; height:36px;
+      border-radius: 9px;
+      background: rgba(255,255,255,0.95);
+      display:flex; align-items:center; justify-content:center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      border: none;
+      cursor: pointer;
+      .icon-heart { color: #ff6b6b; font-weight: 700; }
+      &.fav-active { background: #fff0f0; }
+    }
+
+    &__media {
+      border-radius: 8px;
+      background: #fafafa;
+      padding: 14px;
+      display:flex;align-items:center;justify-content:center;
+      img.product-card__main { max-height: 160px; object-fit: contain; }
+    }
+
+    &__thumbs {
+      display:flex;
+      gap: 8px;
+      margin-top: 8px;
+      img {
+        width: 48px; height:36px; border-radius: 6px; object-fit: cover; cursor: pointer;
+        border: 2px solid transparent;
+        &.is-active { border-color: #f2b267; }
+      }
+    }
+
+    &__meta {
+      padding-top: 8px;
+
+      .product-card__badge {
+        display:inline-block;
+        background: #fff8f0;
+        color: #d06b00;
+        border: 1px solid #f0d3bc;
+        padding: 6px 8px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 12px;
+      }
+
+      & .product-card__title { margin: 6px 0 8px; font-size:15px; }
+
+      .product-card__price {
+        display:flex;
+        align-items:center;
+        gap: 10px;
+        .price { font-weight:700; font-size:16px; }
+        .price-old { color: $muted; text-decoration: line-through; font-size:13px; }
+      }
+
+      .product-card__action {
+        margin-top: 12px;
+        .btn-add {
+          width: 100%;
+          display:inline-block;
+          padding: 12px;
+          border-radius: 10px;
+          background: $accent;
+          color: #fff;
+          text-align: center;
+          font-weight: 700;
+          text-decoration: none;
+          box-shadow: 0 6px 18px rgba(7,11,18,0.12);
+        }
+      }
+    }
+  }
+
+  /* ---------------- OFFER ---------------- */
+  .home-offer {
+    margin-top: 36px;
+    height: 260px;
+    border-radius: $card-radius;
+    overflow: hidden;
+    position: relative;
+
+    &__bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      z-index: 1;
+      transform: translateZ(0);
+      filter: saturate(1.03) contrast(1.02);
+    }
+
+    &__content {
+      position: relative;
+      z-index: 2;
+      color: white;
+      padding: 24px;
+      max-width: 720px;
+    }
+  }
+
+  /* ---------------- TESTIMONIALS ---------------- */
+  .home-testimonials {
+    margin-top: 42px;
+    padding: 28px 18px;
+    background: linear-gradient(180deg,#fff,#fbfdff);
+    border-radius: $card-radius;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    &__inner {
+      width: 100%;
+      max-width: $max-width;
+      text-align: center;
+    }
+
+    &__header {
+      margin-bottom: 20px;
+      h2 {
+        margin: 0;
+        font-size: 18px;
+        color: #111;
+        font-weight: 700;
+      }
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .testi-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 26px 18px 18px;
+      box-shadow: $card-shadow;
+      position: relative;
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: var(--accent, #efe9ff);
+        z-index: 1;
+      }
+
+      &__avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 999px;
+        overflow: hidden;
+        display: block;
+        margin-top: -48px;
+        margin-bottom: 12px;
+        border: 4px solid #fff;
+        box-shadow: 0 6px 20px rgba(16,24,40,0.06);
+        img { width: 100%; height: 100%; object-fit: cover; display:block; }
+      }
+
+      &__body {
+        margin-top: 6px;
+        .testi-card__text {
+          margin: 0 0 12px;
+          font-size: 14px;
+          color: #333;
+          line-height: 1.45;
+        }
+        .testi-card__who {
+          display:flex;
+          flex-direction: column;
+          gap:4px;
+          .testi-name { font-weight:700; font-size: 14px; color: #111; }
+          .testi-role { font-size: 12px; color: $muted; }
+        }
+      }
+    }
+  }
+
+  /* ---------------- RESPONSIVE ---------------- */
+  @media (max-width: 1024px) {
+    .home-products { &__grid { grid-template-columns: repeat(2, 1fr); } }
+    .home-testimonials { &__grid { grid-template-columns: repeat(2, 1fr); } }
+    .home-hero { height: 320px; }
+  }
+
+  @media (max-width: 640px) {
+    .home-container { margin: -40px 12px 20px; padding: 0 12px; }
+    .home-products { &__grid { grid-template-columns: 1fr; gap:12px; } }
+    .home-testimonials {
+      &__grid {
+        grid-auto-flow: column;
+        grid-auto-columns: calc(100% - 48px);
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 8px;
+        & > * { scroll-snap-align: start; }
+      }
+    }
+    .home-hero { height: 260px; }
+    .home-offer { height: 180px; .home-offer__bg { background-attachment: scroll; } }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "PHP + MySQL (Swordigo.in)",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [8000, 8081],
+  "postCreateCommand": "apt-get update && apt-get install -y git inotify-tools",
+  "postStartCommand": "nohup /workspace/scripts/autopush-watcher.sh . $(git rev-parse --abbrev-ref HEAD) >/tmp/autopush.log 2>&1 &",
+  "shutdownAction": "stopContainer",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "ms-azuretools.vscode-docker",
+        "formulahendry.auto-close-tag"
+      ]
+    }
+  }
+}

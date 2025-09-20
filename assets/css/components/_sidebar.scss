@@ -1,0 +1,197 @@
+/* Sidebar + Toggle Component (Swordigo.IN)
+   Saved as: assets/css/components/_sidebar.scss
+   Import into main.scss and compile to assets/css/main.css
+*/
+
+/* Theme variables */
+$charcoal: #2a2a2a;
+$drawer-dark: #1f1f1f;
+$muted-white: rgba(255, 255, 255, 0.92);
+$accent: #ff5a00;
+
+/* Sidebar container */
+#comp-sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px; // hidden by default
+    width: 280px;
+    height: 100vh;
+    background: $drawer-dark;
+    color: $muted-white;
+    box-shadow: 6px 0 24px rgba(0, 0, 0, 0.5);
+    transition: left 0.3s cubic-bezier(.2, .9, .2, 1);
+    z-index: 1600;
+    overflow-y: auto;
+
+    &.is-open {
+        left: 0;
+    }
+
+    .sidebar__inner {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        min-height: 100%;
+    }
+
+    .sidebar__close {
+        align-self: flex-end;
+        background: transparent;
+        border: none;
+        color: $muted-white;
+        font-size: 20px;
+        padding: 6px;
+        border-radius: 6px;
+        cursor: pointer;
+
+        &:hover {
+            color: #fff;
+            transform: translateY(-1px);
+        }
+    }
+
+    .sidebar__nav {
+        margin: 0; // remove extra top margin
+        padding: 0; // keep it flush
+        display: flex;
+        flex-direction: column;
+
+        a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.88);
+            text-decoration: none;
+            padding: 14px 20px; // consistent vertical spacing
+            border-radius: 0; // optional: flush edges
+            transition: background 0.12s ease, transform 0.08s ease, color 0.12s ease;
+            font-size: 1rem;
+
+            .material-icons {
+                font-size: 20px;
+                width: 28px;
+                text-align: center;
+            }
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.04);
+                transform: none;
+                color: #fff;
+            }
+        }
+
+        .sidebar-item--danger {
+            color: #ffb3a6;
+        }
+
+        .sidebar-sep {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            margin: 8px 0;
+        }
+    }
+}
+
+/* Backdrop */
+#sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+    z-index: 1550;
+
+    &.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+/* Toggle button */
+/* Toggle button */
+/* Minimal toggle button (visible on large screens only) */
+.sidebar-toggle {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 1700;
+
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+
+    color: $charcoal; // icon color
+    cursor: pointer;
+
+    .material-icons {
+        font-size: 22px;
+        line-height: 1;
+        display: block;
+    }
+
+    &:hover {
+        opacity: 0.85;
+        transform: none;
+    }
+
+    &:focus {
+        outline: 2px solid rgba($accent, 0.12);
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+
+    &.active {
+        color: $accent; // optional highlight when sidebar is open
+    }
+
+    /* Hide toggle on small / medium screens (show only on large screens) */
+    @media (max-width: 991px) {
+        display: none !important;
+    }
+}
+
+/* Hide toggle when sidebar is open */
+.sidebar-toggle.hidden {
+    display: none !important;
+}
+
+
+
+/* Accessibility focus outlines */
+.sidebar-toggle:focus,
+#comp-sidebar .sidebar__close:focus,
+#comp-sidebar .sidebar__nav a:focus {
+    // outline: 2px solid rgba($accent, 0.16);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+/* Responsive: bottom drawer on very small screens */
+@media (max-width: 480px) {
+    #comp-sidebar {
+        left: 0;
+        transform: translateY(100%);
+        width: 100%;
+        max-width: 100%;
+        bottom: 0;
+        top: auto;
+        transition: transform 0.3s cubic-bezier(.2, .9, .2, 1);
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    #comp-sidebar.is-open {
+        transform: translateY(0);
+    }
+}

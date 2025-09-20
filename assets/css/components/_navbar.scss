@@ -1,0 +1,1093 @@
+/* local vars */
+$navbar-height: 70px;
+$search-width: 220px;
+$z-navbar: 1200;
+$z-portal: 99999;
+$transition-fast: 0.18s;
+$badge-bg: #e74c3c;
+$notif-accent: #6fb8ff;
+
+/* NAVBAR BASE */
+#main-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $navbar-height;
+    background: $white;
+    color: $charcoal;
+    border-bottom: 1px solid lighten($charcoal, 80%);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 $space-md;
+    z-index: $z-navbar;
+    font-family: $font-primary;
+    box-sizing: border-box;
+    overflow: visible; // allow portal dropdowns to be visible
+}
+
+/* columns */
+#main-navbar .nav-left,
+#main-navbar .nav-right {
+    flex: 1;
+}
+
+#main-navbar .nav-center {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-link img {
+    max-height: calc($navbar-height - 28px);
+    display: block;
+}
+
+/* RIGHT SIDE AREA */
+#main-navbar .nav-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: $space-md;
+    overflow: visible;
+}
+
+/* Search behaviour (desktop only) */
+.search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+/* animate width smoothly without layout jump */
+.search-input {
+    max-width: 0;
+    opacity: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: $gray;
+    color: $charcoal;
+    border-radius: 50px;
+    transition: max-width $transition-fast ease, opacity $transition-fast ease, padding $transition-fast ease;
+    box-sizing: border-box;
+}
+
+.search-container.is-active .search-input {
+    max-width: $search-width;
+    padding: 7px 10px;
+    opacity: 1;
+}
+
+.search-icon {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    color: $charcoal;
+    padding: 6px;
+}
+
+/* Icon styles (common) */
+.nav-icon {
+    background: none;
+    border: 0;
+    padding: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: $charcoal;
+    position: relative;
+}
+
+.nav-icon i {
+    font-size: 18px;
+}
+
+/* unified badge style for nav icons */
+.nav-icon .badge,
+.cart-container .badge,
+.notification-icon .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: $badge-bg;
+    color: $white;
+    min-width: 18px;
+    height: 18px;
+    padding: 8px 5px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    border: 2px solid $white;
+    line-height: 1;
+    box-sizing: border-box;
+}
+
+/* Larger cart + bell icons */
+.cart-icon i,
+.notification-icon i {
+    font-size: 20px; // was 18px, bumped up a bit
+}
+
+.cart-icon {
+    .fa-shopping-cart {
+        font-size: 20px;
+    }
+}
+
+.notification-icon {
+    .fa-bell {
+        font-size: 20px;
+    }
+}
+
+/* slightly smaller badge for very small screens */
+@media (max-width: 420px) {
+
+    .nav-icon .badge,
+    .cart-container .badge,
+    .notification-icon .badge {
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        font-size: 10px;
+        top: 2px;
+        right: 2px;
+        border: 1px solid $white;
+    }
+}
+
+/* Cart specific container (keeps layout tidy) */
+.cart-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    .cart-icon,
+    .cart-container a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        padding: 6px;
+        color: $charcoal;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    /* ensure badge sits nicely even when icon size changes */
+    .badge {
+        top: -5px;
+        right: -5px;
+    }
+}
+
+/* Profile link (avatar + optional user-info if present) */
+.profile-link {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-sm;
+    text-decoration: none;
+    color: $charcoal;
+
+    img {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid transparent;
+        transition: border-color $transition-fast;
+        display: block;
+    }
+
+    &:hover img {
+        border-color: $charcoal;
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: darken($charcoal, 20%);
+        }
+    }
+}
+
+/* ---- GENERIC PORTAL DROPDOWN (applies to all portals) ---- */
+.portal-dropdown {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    min-width: 220px;
+    background: $white;
+    border: 1px solid lighten($charcoal, 82%);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 6px 0;
+    z-index: $z-portal;
+    opacity: 0;
+    transform: translateY(-6px) scale(0.995);
+    pointer-events: none;
+    transition: opacity $transition-fast ease, transform $transition-fast ease;
+    will-change: transform, opacity;
+    overflow: hidden;
+    --portal-arrow-left: 16px;
+}
+
+/* show state */
+.portal-dropdown.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* arrow — uses CSS variable set by JS */
+.portal-dropdown::before {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: $white;
+    transform: rotate(45deg);
+    border-left: 1px solid lighten($charcoal, 82%);
+    border-top: 1px solid lighten($charcoal, 82%);
+    top: -6px;
+    left: calc(var(--portal-arrow-left, 16px) - 6px);
+    box-shadow: -3px -3px 6px rgba(0, 0, 0, 0.02);
+    display: block;
+    pointer-events: none;
+}
+
+/* menu item */
+.portal-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    color: $charcoal;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.portal-dropdown a:hover {
+    background: $gray;
+}
+
+/* menu header */
+.portal-dropdown .notif-title {
+    padding: 8px 14px;
+    color: darken($charcoal, 20%);
+    font-size: 13px;
+    border-bottom: 1px solid lighten($charcoal, 86%);
+}
+
+/* ---------- PROFILE PORTAL (dark theme using $charcoal) ---------- */
+.portal-dropdown.profile {
+    background: $charcoal;
+    color: $white;
+    border-color: darken($charcoal, 6%);
+}
+
+/* arrow color for dark profile portal */
+.portal-dropdown.profile::before {
+    background: $charcoal;
+    border-left-color: darken($charcoal, 6%);
+    border-top-color: darken($charcoal, 6%);
+    box-shadow: none;
+}
+
+/* profile header area */
+.portal-dropdown.profile .profile-header {
+    display: flex;
+    gap: $space-sm;
+    align-items: center;
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* avatar in header */
+.portal-dropdown.profile .profile-header .ph-avatar {
+    height: 48px;
+    width: 48px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+/* info */
+.portal-dropdown.profile .profile-header .ph-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    overflow: hidden;
+}
+
+.portal-dropdown.profile .ph-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: $white;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.portal-dropdown.profile .ph-email {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.75);
+    margin-top: 2px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* items list for profile */
+.portal-dropdown.profile .profile-items {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+}
+
+.portal-dropdown.profile .profile-items a {
+    padding: 12px 14px;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 14px;
+    text-decoration: none;
+    align-items: center;
+    display: flex;
+    transition: background $transition-fast ease;
+}
+
+.portal-dropdown.profile .profile-items a i,
+.portal-dropdown.profile .profile-footer a i {
+    color: rgba(255, 255, 255, 0.9);
+    width: 18px;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* subtle separators between groups */
+.portal-dropdown.profile .profile-items a+a {
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* hover */
+.portal-dropdown.profile .profile-items a:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* footer area with a separator */
+.portal-dropdown.profile .profile-footer {
+    padding: 8px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* sign out emphasized (use badge color) */
+.portal-dropdown.profile .profile-footer a.sign-out {
+    padding: 12px 14px;
+    color: $white;
+    font-weight: 600;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    i {
+        color: $badge-bg;
+    }
+
+    /* make the label slightly accented */
+    color: rgba(255, 255, 255, 0.98);
+}
+
+/* ---------- NOTIFICATIONS PORTAL (dark, match screenshot) ---------- */
+.portal-dropdown.notifications {
+    width: 360px;
+    min-width: 280px;
+    max-width: calc(100vw - 32px);
+    padding: 0;
+    background: linear-gradient(180deg, darken($charcoal, 2%), darken($charcoal, 6%));
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    box-shadow: 0 18px 50px rgba(20, 30, 60, 0.5);
+    color: $white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* arrow color & border */
+.portal-dropdown.notifications::before {
+    background: linear-gradient(180deg, darken($charcoal, 2%), darken($charcoal, 6%));
+    border-left-color: rgba(0, 0, 0, 0.25);
+    border-top-color: rgba(0, 0, 0, 0.25);
+    box-shadow: none;
+}
+
+/* inner wrapper */
+.portal-dropdown.notifications .notifications-inner {
+    padding: 12px 10px;
+}
+
+/* list */
+.portal-dropdown.notifications .notif-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* item */
+.portal-dropdown.notifications .notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgb(39, 38, 38), rgba(0, 0, 0, 0.03));
+    transition: background 0.12s ease, transform 0.12s ease;
+    position: relative;
+}
+
+/* hover */
+.portal-dropdown.notifications .notif-item:hover {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.301), rgba(255, 255, 255, 0.01));
+    transform: translateY(-1px);
+}
+
+/* avatar (small top nudge so top-align with name line) */
+.portal-dropdown.notifications .notif-avatar {
+    height: 44px;
+    width: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    margin-top: 2px;
+}
+
+/* body */
+.portal-dropdown.notifications .notif-body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* text */
+.portal-dropdown.notifications .notif-text {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 14px;
+    line-height: 1.25;
+    white-space: normal;
+}
+
+/* first line pieces (name + action inline) */
+.portal-dropdown.notifications .notif-name {
+    font-weight: 700;
+    margin-right: 6px;
+    display: inline;
+}
+
+/* link on its own line for emphasis */
+.portal-dropdown.notifications .notif-link {
+    display: block;
+    margin-top: 0;
+    margin-left: -13px;
+    color: $white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.portal-dropdown.notifications .notif-link:hover {
+    text-decoration: underline;
+    background: none;
+}
+
+/* meta */
+.portal-dropdown.notifications .notif-meta {
+    margin-top: -4px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* small square/circular button */
+.portal-dropdown.notifications .notif-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.9);
+    height: 34px;
+    width: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.12s ease, transform 0.08s ease;
+    font-size: 13px;
+}
+
+.portal-dropdown.notifications .notif-btn:hover {
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateY(-1px);
+}
+
+/* focus (keyboard) */
+.portal-dropdown.notifications .notif-btn:focus,
+.portal-dropdown.notifications .footer-btn:focus {
+    outline: 2px solid rgba(111, 184, 255, 0.22);
+    outline-offset: 2px;
+}
+
+/* footer */
+.portal-dropdown.notifications .notif-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(0, 0, 0, 0.02));
+}
+
+.portal-dropdown.notifications .view-all {
+    color: rgba(255, 255, 255, 0.95);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    background: none;
+}
+
+/* minor hover styling fix for viewall id */
+#viewall-id:hover {
+    color: red;
+}
+
+.portal-dropdown.notifications .footer-btn {
+    height: 34px;
+    width: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+}
+
+/* subtle scrollbar */
+.portal-dropdown.notifications .notif-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.portal-dropdown.notifications .notif-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+}
+
+/* responsive tweaks */
+@media (max-width: $bp-md) {
+    #main-navbar {
+        padding: 0 $space-sm;
+    }
+
+    .nav-left {
+        display: none;
+    }
+
+    .nav-center {
+        justify-content: flex-start;
+    }
+
+    /* hide desktop search input on mobile (keep search icon if you want) */
+    .search-container .search-input {
+        display: none !important;
+    }
+
+
+    .search-icon,
+    .search-container .search-icon {
+        display: none !important;
+    }
+
+    .profile-link img {
+        height: 36px;
+        width: 36px;
+    }
+
+    .profile-link .user-info {
+        display: none;
+    }
+
+    .nav-icon .badge,
+    .cart-container .badge {
+        top: -5px;
+        right: -5px;
+        width: 16px;
+        height: 16px;
+        font-size: 9px;
+        padding: 0 4px;
+    }
+
+    .notification-icon .badge {
+        top: -3px;
+        right: -1px;
+        width: 16px;
+        height: 16px;
+        font-size: 9px;
+        padding: 0 4px;
+    }
+
+    .portal-dropdown.notifications {
+        width: calc(100vw - 24px);
+        left: 12px !important;
+        right: 12px !important;
+        border-radius: 8px;
+    }
+
+    .portal-dropdown.notifications .notif-item {
+        padding: 10px 8px;
+        gap: 10px;
+    }
+
+    .portal-dropdown.notifications .notif-avatar {
+        height: 40px;
+        width: 40px;
+    }
+
+    .portal-dropdown.notifications .notif-footer {
+        padding: 8px;
+    }
+
+    .portal-dropdown.profile .profile-header {
+        padding: 10px 12px;
+    }
+
+    .portal-dropdown.profile .profile-items a,
+    .portal-dropdown.profile .profile-footer a {
+        padding: 10px 12px;
+    }
+}
+
+/* utility: ensure portal arrow uses CSS var even if not set */
+.portal-dropdown {
+    --portal-arrow-left: 16px;
+}
+
+/* ------------------------
+   Cart Sidebar (desktop only)
+   ------------------------ */
+$cart-width: 380px;
+$cart-z: 1300;
+
+#cart-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease;
+    z-index: $cart-z - 1;
+}
+
+#cart-backdrop.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -#{$cart-width};
+    width: $cart-width;
+    height: 100vh;
+    background: $white;
+    color: $charcoal;
+    z-index: $cart-z;
+    box-shadow: -10px 0 30px rgba(10, 20, 30, 0.12);
+    transition: right 0.28s cubic-bezier(.2, .9, .2, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#cart-sidebar.is-open {
+    right: 0;
+}
+
+.cart-sidebar__inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.cart-sidebar__close {
+    background: transparent;
+    border: 0;
+    padding: 10px;
+    align-self: flex-end;
+    cursor: pointer;
+    color: $charcoal;
+}
+
+.cart-sidebar__header {
+    padding: 12px 16px;
+    border-bottom: 1px solid lighten($charcoal, 86%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .cart-sidebar__meta {
+        font-size: 13px;
+        color: darken($charcoal, 20%);
+    }
+}
+
+.cart-sidebar__content {
+    padding: 12px 12px;
+    overflow-y: auto;
+    flex: 1 1 auto;
+}
+
+.cart-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 6px;
+    border-radius: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.cart-item__img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.cart-item__title {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.cart-item__meta {
+    color: darken($charcoal, 20%);
+    font-size: 13px;
+}
+
+.cart-sidebar__footer {
+    padding: 12px;
+    border-top: 1px solid lighten($charcoal, 86%);
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+/* Hide cart UI entirely on small/medium screens */
+@media (max-width: $bp-md) {
+    .cart-container {
+        display: none;
+    }
+
+    #cart-sidebar,
+    #cart-backdrop {
+        display: none !important;
+    }
+}
+
+/* Cart visual refresh – match screenshot look */
+$cart-radius: 14px;
+$cart-padding: 14px;
+$cart-bg: #ffffff;
+$cart-shadow: 0 30px 80px rgba(2, 6, 23, 0.28);
+$cart-header-accent: #f6fbf9;
+$cart-accent: #2a9d8f;
+/* checkout / accent color */
+$muted: #8a8a8a;
+$price-color: #111;
+$small: 13px;
+
+#cart-sidebar {
+    right: -#{$cart-width};
+    width: $cart-width;
+    max-width: 420px;
+    border-top-left-radius: $cart-radius;
+    border-bottom-left-radius: $cart-radius;
+    background: $cart-bg;
+    box-shadow: $cart-shadow;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* inner padding and layout */
+.cart-sidebar__inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Close icon top-right (floating) */
+.cart-sidebar__close {
+    background: transparent;
+    border: 0;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: 8px;
+    margin-top: 8px;
+    color: $muted;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Header */
+.cart-sidebar__header {
+    padding: 8px $cart-padding;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .cart-sidebar__meta {
+        text-align: right;
+        font-size: 13px;
+        color: $muted;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        .cart-count {
+            font-weight: 700;
+            color: $price-color;
+        }
+
+        .cart-total {
+            font-weight: 700;
+            color: $price-color;
+            margin-top: 6px;
+        }
+    }
+}
+
+/* Promo/info bar under header */
+.cart-sidebar__promo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px $cart-padding;
+    background: $cart-header-accent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    color: darken($muted, 6%);
+    font-size: $small;
+}
+
+/* content area */
+.cart-sidebar__content {
+    padding: 10px $cart-padding;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* cart item row */
+.cart-item {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 8px;
+    border-radius: 10px;
+    background: transparent;
+    min-height: 78px;
+}
+
+.cart-item__img {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.cart-item__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cart-item__title {
+    font-weight: 700;
+    font-size: 14px;
+    color: $price-color;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cart-item__variant {
+    font-size: 13px;
+    color: $muted;
+}
+
+/* right column: quantity + price */
+.cart-item__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+/* quantity control */
+.qty-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 4px;
+    background: #fff;
+}
+
+.qty-control button {
+    background: transparent;
+    border: 0;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.qty-control .qty-value {
+    min-width: 22px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* price */
+.cart-item__price {
+    font-weight: 700;
+    color: $price-color;
+    font-size: 14px;
+}
+
+/* remove/trash icon */
+.cart-item__remove {
+    background: transparent;
+    border: 0;
+    color: $muted;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+/* sticky footer (subtotal / checkout) */
+.cart-sidebar__footer {
+    padding: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), $cart-bg);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cart-totals {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    color: $muted;
+
+    .tot-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .label {
+            color: $muted;
+        }
+
+        .value {
+            color: $price-color;
+            font-weight: 700;
+        }
+    }
+
+    .tot-row.total {
+        font-size: 16px;
+    }
+}
+
+/* checkout button full width */
+.cart-sidebar__footer .btn {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* smaller payment icons row */
+.cart-payments {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.95;
+
+    img {
+        height: 20px;
+    }
+}
+
+/* responsive: scale a bit on very small screens if visible */
+@media (max-width: 420px) {
+    #cart-sidebar {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+    }
+
+    .cart-item__img {
+        width: 60px;
+        height: 60px;
+    }
+}

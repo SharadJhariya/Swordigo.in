@@ -1,0 +1,330 @@
+/* Sidebar + Toggle Component (Swordigo.IN)
+   Saved as: assets/css/components/_sidebar.scss
+   Import into main.scss and compile to assets/css/main.css
+*/
+
+/* Theme variables */
+$charcoal: #2a2a2a;
+$drawer-dark: #1f1f1f;
+$muted-white: rgba(255, 255, 255, 0.92);
+$accent: #ff5a00;
+
+/* Sidebar container */
+#comp-sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px; // hidden by default
+    width: 280px;
+    height: 100vh;
+    background: $drawer-dark;
+    color: $muted-white;
+    box-shadow: 6px 0 24px rgba(0, 0, 0, 0.5);
+    transition: left 0.3s cubic-bezier(.2, .9, .2, 1);
+    z-index: 1600;
+    overflow-y: auto;
+
+    &.is-open {
+        left: 0;
+    }
+
+    .sidebar__inner {
+        display: flex;
+        flex-direction: column;
+        padding: 0; // no extra top padding
+        min-height: 100%;
+    }
+
+    .sidebar__close {
+        align-self: flex-end;
+        background: transparent;
+        border: none;
+        color: $muted-white;
+        font-size: 20px;
+        padding: 10px;
+        border-radius: 6px;
+        cursor: pointer;
+
+        &:hover {
+            color: #fff;
+            transform: translateY(-1px);
+        }
+    }
+
+    .sidebar__nav {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+
+        a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.88);
+            text-decoration: none;
+            padding: 14px 20px; // consistent vertical spacing
+            border-radius: 0;
+            transition: background 0.12s ease, transform 0.08s ease, color 0.12s ease;
+            font-size: 1rem;
+
+            .material-icons {
+                font-size: 20px;
+                color: rgba(255, 255, 255, 0.92);
+                width: 28px;
+                text-align: center;
+            }
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.04);
+                transform: none;
+                color: #fff;
+            }
+        }
+
+        .sidebar-item--danger {
+            color: #ffb3a6;
+        }
+
+        .sidebar-sep {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            margin: 8px 0;
+        }
+    }
+}
+
+/* Backdrop */
+#sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+    z-index: 1550;
+
+    &.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+/* Toggle button */
+.sidebar-toggle {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 1700;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: $charcoal;
+    cursor: pointer;
+
+    .material-icons {
+        font-size: 22px;
+    }
+
+    &:hover {
+        opacity: 0.85;
+    }
+
+    &.active {
+        color: $accent;
+    }
+
+    &.hidden {
+        display: none !important;
+    }
+
+    /* Hide toggle on small/medium screens, show only on large screens */
+    @media (max-width: 991px) {
+        display: none !important;
+    }
+}
+
+/* Accessibility focus outlines */
+.sidebar-toggle:focus,
+#comp-sidebar .sidebar__close:focus,
+#comp-sidebar .sidebar__nav a:focus {
+    outline: 2px solid rgba($accent, 0.16);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+/* Responsive: bottom drawer on very small screens */
+@media (max-width: 480px) {
+    #comp-sidebar {
+        left: 0;
+        transform: translateY(100%);
+        width: 100%;
+        max-width: 100%;
+        bottom: 0;
+        top: auto;
+        height: 47vh; // not full height
+        max-height: 47vh;
+        transition: transform 0.3s cubic-bezier(.2, .9, .2, 1);
+        border-top-left-radius: 14px;
+        border-top-right-radius: 14px;
+        overflow-y: auto;
+    }
+
+    #comp-sidebar.is-open {
+        transform: translateY(0);
+    }
+}
+
+/* =====================
+   Bottom Mobile Navbar
+   ===================== */
+.bottom-navbar {
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 10px;
+    border-radius: 12px;
+    z-index: 1800;
+
+    background: $charcoal;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+
+    .bn-item {
+        flex: 1 1 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.92);
+        text-decoration: none;
+        border: none;
+        background: transparent;
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.12s ease, color 0.12s ease, transform 0.08s ease;
+
+        .material-icons {
+            font-size: 22px;
+        }
+
+        &:hover,
+        &:focus {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-2px);
+            outline: none;
+        }
+    }
+
+    .bn-toggle.active {
+        color: $accent;
+    }
+}
+
+/* Show bottom navbar only on small screens */
+@media (min-width: 992px) {
+    .bottom-navbar {
+        display: none !important;
+    }
+}
+
+/* On very small screens */
+@media (max-width: 420px) {
+    .bottom-navbar {
+        left: 8px;
+        right: 8px;
+        bottom: 10px;
+        height: 52px;
+        border-radius: 10px;
+
+        .material-icons {
+            font-size: 20px;
+        }
+    }
+}
+
+/* =====================
+   Mobile Search Modal
+   ===================== */
+.mobile-search {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1900;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    background: rgba(0, 0, 0, 0.45); // dim background
+    backdrop-filter: blur(6px); // blur effect
+
+    &.is-open {
+        pointer-events: auto;
+        opacity: 1;
+    }
+
+    .mobile-search__panel {
+        width: min(560px, 94%);
+        background: rgba(30, 30, 30, 0.9);
+        padding: 40px 14px 14px; // extra top padding for close button
+        border-radius: 10px;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .mobile-search__close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        border: none;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.9);
+        cursor: pointer;
+        padding: 4px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .material-icons {
+            font-size: 22px;
+        }
+    }
+
+    .mobile-search__form {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .mobile-search__form input[type="search"] {
+        flex: 1;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-size: 16px;
+    }
+
+    .mobile-search__submit {
+        border: none;
+        background: $accent;
+        color: #fff;
+        padding: 8px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+}

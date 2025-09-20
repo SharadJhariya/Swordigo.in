@@ -1,0 +1,16 @@
+{
+  "name": "swordigo.in",
+  "version": "1.0.0",
+  "description": "This repo runs PHP + MySQL + SCSS directly inside **GitHub Codespaces**.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chokidar": "^4.0.3",
+    "simple-git": "^3.28.0"
+  }
+}

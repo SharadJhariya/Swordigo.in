@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+  app:
+    image: php:8.2-apache
+    container_name: app
+    volumes:
+      - ..:/workspace:cached
+      - ./apache-site.conf:/etc/apache2/sites-available/000-default.conf:ro
+    working_dir: /workspace
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_DATABASE=swordigo
+      - DB_USERNAME=swordigo_user
+      - DB_PASSWORD=swordigo_pass
+    ports:
+      - "8000:80"
+
+  db:
+    image: mariadb:10.6
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: swordigo
+      MYSQL_USER: swordigo_user
+      MYSQL_PASSWORD: swordigo_pass
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: rootpass
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:

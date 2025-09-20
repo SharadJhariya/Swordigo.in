@@ -1,0 +1,23 @@
+// assets/css/main.scss
+
+// Variables & Mixins
+@import 'variables';
+@import 'mixins';
+
+// Base styles
+@import 'base';
+
+// Components
+@import 'components/product-card';
+@import 'components/cart-drawer';
+@import 'components/sidebar';
+@import 'components/navbar';
+@import 'components/bottom-nav';
+@import 'components/footer';
+
+// Pages
+@import 'pages/home';
+// @import 'pages/product';
+// @import 'pages/checkout';
+// @import 'pages/profile';
+// @import 'pages/auth';
