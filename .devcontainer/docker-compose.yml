@@ -1,7 +1,10 @@
 version: "3.8"
 services:
-  app:
-    image: php:8.2-apache
+    app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: swordigo_app:latest
     container_name: app
     volumes:
       - ..:/workspace:cached
